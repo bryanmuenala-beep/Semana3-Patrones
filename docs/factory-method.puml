@@ -1,0 +1,61 @@
+@startuml
+
+interface Notificador {
+    + enviar(destinatario : String, mensaje : String) : void
+}
+
+class NotificadorCorreo {
+    + enviar(destinatario : String, mensaje : String) : void
+}
+
+class NotificadorSMS {
+    + enviar(destinatario : String, mensaje : String) : void
+}
+
+class NotificadorPush {
+    + enviar(destinatario : String, mensaje : String) : void
+}
+
+class NotificadorWhatsApp {
+    + enviar(destinatario : String, mensaje : String) : void
+}
+
+abstract class CreadorNotificador {
+    + crearNotificador() : Notificador
+    + enviarNotificacion(destinatario : String, mensaje : String) : void
+}
+
+class CreadorCorreo {
+    + crearNotificador() : Notificador
+}
+
+class CreadorSMS {
+    + crearNotificador() : Notificador
+}
+
+class CreadorPush {
+    + crearNotificador() : Notificador
+}
+
+class CreadorWhatsApp {
+    + crearNotificador() : Notificador
+}
+
+NotificadorCorreo ..|> Notificador
+NotificadorSMS ..|> Notificador
+NotificadorPush ..|> Notificador
+NotificadorWhatsApp ..|> Notificador
+
+CreadorCorreo --|> CreadorNotificador
+CreadorSMS --|> CreadorNotificador
+CreadorPush --|> CreadorNotificador
+CreadorWhatsApp --|> CreadorNotificador
+
+CreadorNotificador ..> Notificador : crea
+
+CreadorCorreo ..> NotificadorCorreo
+CreadorSMS ..> NotificadorSMS
+CreadorPush ..> NotificadorPush
+CreadorWhatsApp ..> NotificadorWhatsApp
+
+@enduml

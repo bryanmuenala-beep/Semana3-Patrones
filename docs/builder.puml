@@ -1,0 +1,49 @@
+@startuml
+
+class Reserva {
+    - estudiante : String
+    - tutor : String
+    - fecha : String
+    - hora : String
+    - modalidad : String
+    - tema : String
+    - observaciones : String
+
+    + getEstudiante() : String
+    + getTutor() : String
+    + getFecha() : String
+    + getHora() : String
+    + getModalidad() : String
+    + getTema() : String
+    + getObservaciones() : String
+    + toString() : String
+}
+
+class ReservaBuilder {
+    - estudiante : String
+    - tutor : String
+    - fecha : String
+    - hora : String
+    - modalidad : String
+    - tema : String
+    - observaciones : String
+
+    + estudiante(estudiante : String) : ReservaBuilder
+    + tutor(tutor : String) : ReservaBuilder
+    + fecha(fecha : String) : ReservaBuilder
+    + hora(hora : String) : ReservaBuilder
+    + modalidad(modalidad : String) : ReservaBuilder
+    + tema(tema : String) : ReservaBuilder
+    + observaciones(observaciones : String) : ReservaBuilder
+    + build() : Reserva
+}
+
+class DemoBuilder {
+    + main(args : String[]) : void
+}
+
+ReservaBuilder ..> Reserva : construye
+DemoBuilder ..> ReservaBuilder : utiliza
+DemoBuilder ..> Reserva : crea
+
+@enduml
