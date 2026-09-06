@@ -1,0 +1,165 @@
+@startuml
+top to bottom direction
+title Sistema de Gestion de Tutorias - Incremento 1
+
+skinparam classAttributeIconSize 0
+
+skinparam nodesep 30
+skinparam ranksep 40
+skinparam packageStyle rectangle
+
+' =========================
+' BUILDER
+' =========================
+package "Builder" {
+
+    class Reserva {
+        - estudiante : String
+        - tutor : String
+        - fecha : String
+        - hora : String
+        - modalidad : String
+        - tema : String
+        - observaciones : String
+        + getEstudiante() : String
+        + getTutor() : String
+        + getFecha() : String
+        + getHora() : String
+        + getModalidad() : String
+        + getTema() : String
+        + getObservaciones() : String
+        + toString() : String
+    }
+
+    class ReservaBuilder {
+        - estudiante : String
+        - tutor : String
+        - fecha : String
+        - hora : String
+        - modalidad : String
+        - tema : String
+        - observaciones : String
+        + estudiante(String) : ReservaBuilder
+        + tutor(String) : ReservaBuilder
+        + fecha(String) : ReservaBuilder
+        + hora(String) : ReservaBuilder
+        + modalidad(String) : ReservaBuilder
+        + tema(String) : ReservaBuilder
+        + observaciones(String) : ReservaBuilder
+        + build() : Reserva
+    }
+
+    ReservaBuilder ..> Reserva : construye
+}
+
+' =========================
+' FACTORY METHOD
+' =========================
+package "Factory Method" {
+
+    interface Notificador {
+        + enviar(String, String) : void
+    }
+
+    class NotificadorCorreo
+    class NotificadorSMS
+    class NotificadorPush
+    class NotificadorWhatsApp
+
+    abstract class CreadorNotificador {
+        + crearNotificador() : Notificador
+        + enviarNotificacion(String, String) : void
+    }
+
+    class CreadorCorreo
+    class CreadorSMS
+    class CreadorPush
+    class CreadorWhatsApp
+
+    NotificadorCorreo ..|> Notificador
+    NotificadorSMS ..|> Notificador
+    NotificadorPush ..|> Notificador
+    NotificadorWhatsApp ..|> Notificador
+
+    CreadorCorreo --|> CreadorNotificador
+    CreadorSMS --|> CreadorNotificador
+    CreadorPush --|> CreadorNotificador
+    CreadorWhatsApp --|> CreadorNotificador
+
+    CreadorNotificador ..> Notificador : crea
+}
+
+' =========================
+' OBSERVER
+' =========================
+package "Observer" {
+
+    interface ObservadorReserva {
+        + actualizar(String) : void
+    }
+
+    class ReservaObservable {
+        - estado : String
+        - observadores : List<ObservadorReserva>
+        + agregarObservador(ObservadorReserva) : void
+        + eliminarObservador(ObservadorReserva) : void
+        + cambiarEstado(String) : void
+        - notificarObservadores() : void
+        + getEstado() : String
+    }
+
+    class ObservadorNotificacion {
+        + actualizar(String) : void
+    }
+
+    class ObservadorCalendario {
+        + actualizar(String) : void
+    }
+
+    class ObservadorPanel {
+        + actualizar(String) : void
+    }
+
+    ObservadorNotificacion ..|> ObservadorReserva
+    ObservadorCalendario ..|> ObservadorReserva
+    ObservadorPanel ..|> ObservadorReserva
+
+    ReservaObservable "1" o-- "0..*" ObservadorReserva : observadores
+}
+
+' =========================
+' STRATEGY
+' =========================
+package "Strategy" {
+
+    interface PoliticaCancelacion {
+        + puedeCancelar(int) : boolean
+    }
+
+    class CancelacionNormal {
+        + puedeCancelar(int) : boolean
+    }
+
+    class CancelacionPrioritaria {
+        + puedeCancelar(int) : boolean
+    }
+
+    class CancelacionGrupal {
+        + puedeCancelar(int) : boolean
+    }
+
+    class GestorCancelacion {
+        - politica : PoliticaCancelacion
+        + GestorCancelacion(PoliticaCancelacion)
+        + setPolitica(PoliticaCancelacion) : void
+        + puedeCancelar(int) : boolean
+    }
+
+    CancelacionNormal ..|> PoliticaCancelacion
+    CancelacionPrioritaria ..|> PoliticaCancelacion
+    CancelacionGrupal ..|> PoliticaCancelacion
+
+    GestorCancelacion --> PoliticaCancelacion : utiliza
+}
+
+@enduml

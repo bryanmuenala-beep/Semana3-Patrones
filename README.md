@@ -1,10 +1,10 @@
-# Implementación comparativa de patrones de diseño
+# Sistema de Gestión de Tutorías - Incremento 1
 
 ## Descripción
 
-Este proyecto implementa y compara los patrones de diseño creacionales **Factory Method** y **Builder** aplicados a un Sistema de Gestión de Tutorías.
+Este proyecto corresponde al primer incremento del Sistema de Gestión de Tutorías. El objetivo es aplicar principios de diseño orientado a objetos y patrones de diseño para mantener un sistema organizado, extensible y con bajo acoplamiento.
 
-Factory Method permite gestionar diferentes mecanismos de notificación, mientras que Builder facilita la construcción de reservas con datos obligatorios y opcionales.
+El proyecto parte de la implementación desarrollada anteriormente con los patrones Factory Method y Builder, e incorpora los patrones Observer y Strategy para resolver nuevas necesidades del sistema.
 
 ## Tecnologías utilizadas
 
@@ -15,52 +15,128 @@ Factory Method permite gestionar diferentes mecanismos de notificación, mientra
 - GitHub
 - Visual Studio Code
 
-## Factory Method
+## Alcance del incremento
 
-Factory Method se utiliza para crear diferentes tipos de notificaciones sin depender directamente de clases concretas.
+En este incremento se mantienen Factory Method y Builder porque continúan resolviendo problemas del sistema.
 
-### Tipos de notificación implementados
+Además, se incorporan:
+
+- Observer para permitir que varios componentes reaccionen cuando cambia el estado de una reserva.
+- Strategy para manejar diferentes políticas de cancelación de tutorías.
+
+## Patrones de diseño
+
+### Factory Method
+
+Factory Method permite crear diferentes mecanismos de notificación sin que el sistema dependa directamente de clases concretas.
+
+Tipos implementados:
 
 - Correo electrónico
 - SMS
 - Notificación Push
 - WhatsApp
 
-### Estructura
+La incorporación de nuevos mecanismos de notificación puede realizarse agregando nuevas implementaciones sin modificar las existentes.
 
-- `Notificador`: Product
-- `NotificadorCorreo`: ConcreteProduct
-- `NotificadorSMS`: ConcreteProduct
-- `NotificadorPush`: ConcreteProduct
-- `NotificadorWhatsApp`: ConcreteProduct
-- `CreadorNotificador`: Creator
-- `CreadorCorreo`: ConcreteCreator
-- `CreadorSMS`: ConcreteCreator
-- `CreadorPush`: ConcreteCreator
-- `CreadorWhatsApp`: ConcreteCreator
+### Builder
 
-La incorporación de WhatsApp demuestra que el sistema puede extenderse agregando nuevas clases sin modificar las implementaciones existentes.
+Builder permite construir objetos `Reserva` de manera progresiva, legible y validada.
 
-## Builder
-
-Builder se utiliza para construir objetos `Reserva` de forma progresiva, legible y validada.
-
-### Campos obligatorios
+Campos obligatorios:
 
 - Estudiante
 - Tutor
 - Fecha
 - Hora
 
-### Campos opcionales
+Campos opcionales:
 
 - Modalidad
 - Tema
 - Observaciones
 
-Los campos opcionales cuentan con valores predeterminados. Además, el método `build()` valida los campos obligatorios antes de crear una reserva.
+El método `build()` valida los datos obligatorios antes de crear la reserva.
 
-## Ejecución
+### Observer
+
+Observer se utiliza para permitir que varios componentes reaccionen automáticamente cuando cambia el estado de una reserva.
+
+Componentes principales:
+
+- `ObservadorReserva`
+- `ReservaObservable`
+- `ObservadorNotificacion`
+- `ObservadorCalendario`
+- `ObservadorPanel`
+
+Cuando una reserva cambia de estado, los observadores registrados son notificados sin que `ReservaObservable` dependa directamente de sus implementaciones concretas.
+
+### Strategy
+
+Strategy se utiliza para encapsular diferentes políticas de cancelación de tutorías.
+
+Políticas implementadas:
+
+- `CancelacionNormal`: requiere al menos 24 horas de anticipación.
+- `CancelacionPrioritaria`: requiere al menos 2 horas de anticipación.
+- `CancelacionGrupal`: requiere al menos 48 horas de anticipación.
+
+`GestorCancelacion` trabaja mediante la interfaz `PoliticaCancelacion`, permitiendo cambiar la política sin modificar la lógica principal del gestor.
+
+## Principios SOLID
+
+### Open/Closed Principle (OCP)
+
+El sistema permite incorporar nuevos observadores, mecanismos de notificación y políticas de cancelación mediante nuevas clases sin modificar innecesariamente las implementaciones existentes.
+
+### Dependency Inversion Principle (DIP)
+
+Las clases principales dependen de abstracciones como `Notificador`, `ObservadorReserva` y `PoliticaCancelacion`, reduciendo la dependencia directa de implementaciones concretas.
+
+### Single Responsibility Principle (SRP)
+
+Las responsabilidades se distribuyen entre diferentes clases. Las políticas de cancelación contienen las reglas de cancelación, los observadores reaccionan a los cambios de las reservas y los notificadores gestionan sus respectivos mecanismos de comunicación.
+
+## Cohesión y acoplamiento
+
+Las clases mantienen responsabilidades específicas, favoreciendo una alta cohesión.
+
+El uso de interfaces como `Notificador`, `ObservadorReserva` y `PoliticaCancelacion` reduce el acoplamiento entre los componentes y facilita la extensión del sistema.
+
+## Estructura de paquetes
+
+```text
+edu.uees.patrones
+├── builder
+│   ├── Reserva
+│   ├── ReservaBuilder
+│   └── DemoBuilder
+├── factory
+│   ├── Notificador
+│   ├── NotificadorCorreo
+│   ├── NotificadorSMS
+│   ├── NotificadorPush
+│   ├── NotificadorWhatsApp
+│   ├── CreadorNotificador
+│   └── DemoFactory
+├── observer
+│   ├── ObservadorReserva
+│   ├── ObservadorNotificacion
+│   ├── ObservadorCalendario
+│   ├── ObservadorPanel
+│   ├── ReservaObservable
+│   └── DemoObserver
+└── strategy
+    ├── PoliticaCancelacion
+    ├── CancelacionNormal
+    ├── CancelacionPrioritaria
+    ├── CancelacionGrupal
+    ├── GestorCancelacion
+    └── DemoStrategy
+```
+
+## Compilación y ejecución
 
 Compilar el proyecto:
 
@@ -80,25 +156,49 @@ Ejecutar Builder:
 java -cp target/classes edu.uees.patrones.builder.DemoBuilder
 ```
 
-## Diagramas UML
+Ejecutar Observer:
 
-Los diagramas se encuentran en la carpeta `docs`.
+```bash
+java -cp target/classes edu.uees.patrones.observer.DemoObserver
+```
 
-- `factory-method.puml`
-- `factory-method.png`
-- `builder.puml`
-- `builder.png`
+Ejecutar Strategy:
 
-## Comparación
+```bash
+java -cp target/classes edu.uees.patrones.strategy.DemoStrategy
+```
 
-Factory Method se enfoca en decidir **qué tipo de objeto crear**, mientras que Builder se enfoca en **cómo construir y configurar un objeto complejo**.
+## Diagrama UML
 
-Factory Method facilita la incorporación de nuevos tipos de notificación. Builder mejora la legibilidad y validación durante la creación de reservas.
+El UML actualizado del Incremento 1 se encuentra en:
+
+- `docs/uml-incremento1.puml`
+- `docs/uml-incremento1.png`
+
+El diagrama representa las clases, interfaces y relaciones correspondientes a Factory Method, Builder, Observer y Strategy.
+
+## Verificación
+
+El proyecto fue compilado mediante:
+
+```bash
+mvn clean compile
+```
+
+obteniendo como resultado:
+
+```text
+BUILD SUCCESS
+```
+
+También se ejecutaron `DemoObserver` y `DemoStrategy` para comprobar el comportamiento de los patrones incorporados.
 
 ## Conclusión
 
-Factory Method y Builder solucionan problemas diferentes. Factory Method proporciona extensibilidad en la creación de notificadores, mientras que Builder permite construir reservas de manera clara, flexible y validada.
+Este incremento permitió evolucionar el Sistema de Gestión de Tutorías incorporando nuevos comportamientos sin aumentar innecesariamente el acoplamiento entre las clases.
+
+Observer permite que diferentes componentes reaccionen ante cambios en las reservas, mientras que Strategy permite modificar las políticas de cancelación de forma independiente. Factory Method y Builder se mantienen porque continúan resolviendo necesidades existentes del sistema.
 
 ## Declaración de uso de inteligencia artificial
 
-Para esta actividad utilicé herramientas de inteligencia artificial como apoyo para la estructuración del proyecto, explicación de los patrones de diseño, revisión del código y documentación. Revisé, probé y adapté el contenido generado, y puedo explicar y justificar el código y las decisiones presentadas.
+Para esta actividad utilicé herramientas de inteligencia artificial como apoyo para la estructuración del proyecto, explicación de los patrones de diseño, revisión del código, UML y documentación. Revisé, probé y adapté el contenido generado, y puedo explicar y justificar el código y las decisiones presentadas.
