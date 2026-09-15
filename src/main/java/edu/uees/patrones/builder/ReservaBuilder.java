@@ -50,6 +50,21 @@ public class ReservaBuilder {
 
     public Reserva build() {
 
+        validarCamposObligatorios();
+
+        return new Reserva(
+                estudiante,
+                tutor,
+                fecha,
+                hora,
+                modalidad,
+                tema,
+                observaciones
+        );
+    }
+
+    private void validarCamposObligatorios() {
+
         if (estudiante == null || estudiante.isBlank()) {
             throw new IllegalStateException("El estudiante es obligatorio.");
         }
@@ -65,15 +80,5 @@ public class ReservaBuilder {
         if (hora == null || hora.isBlank()) {
             throw new IllegalStateException("La hora es obligatoria.");
         }
-
-        return new Reserva(
-                estudiante,
-                tutor,
-                fecha,
-                hora,
-                modalidad,
-                tema,
-                observaciones
-        );
     }
 }
