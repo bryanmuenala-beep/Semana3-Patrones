@@ -9,25 +9,23 @@ public class DemoStrategy {
 
         int horasAntes = 10;
 
-        System.out.println("Politica normal:");
-        System.out.println(
-                "¿Puede cancelar con " + horasAntes + " horas de anticipacion? "
-                        + gestor.puedeCancelar(horasAntes)
-        );
+        mostrarResultado("Politica normal", gestor, horasAntes);
 
         gestor.setPolitica(new CancelacionPrioritaria());
-
         System.out.println();
-        System.out.println("Politica prioritaria:");
-        System.out.println(
-                "¿Puede cancelar con " + horasAntes + " horas de anticipacion? "
-                        + gestor.puedeCancelar(horasAntes)
-        );
+        mostrarResultado("Politica prioritaria", gestor, horasAntes);
 
         gestor.setPolitica(new CancelacionGrupal());
-
         System.out.println();
-        System.out.println("Politica grupal:");
+        mostrarResultado("Politica grupal", gestor, horasAntes);
+    }
+
+    private static void mostrarResultado(
+            String nombrePolitica,
+            GestorCancelacion gestor,
+            int horasAntes) {
+
+        System.out.println(nombrePolitica + ":");
         System.out.println(
                 "¿Puede cancelar con " + horasAntes + " horas de anticipacion? "
                         + gestor.puedeCancelar(horasAntes)
