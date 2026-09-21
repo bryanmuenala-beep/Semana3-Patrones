@@ -2,6 +2,8 @@ package edu.uees.patrones.builder;
 
 public class ReservaBuilder {
 
+    private final ValidadorReserva validador = new ValidadorReserva();
+
     // Campos obligatorios
     private String estudiante;
     private String tutor;
@@ -50,7 +52,12 @@ public class ReservaBuilder {
 
     public Reserva build() {
 
-        validarCamposObligatorios();
+        validador.validarCamposObligatorios(
+                estudiante,
+                tutor,
+                fecha,
+                hora
+        );
 
         return new Reserva(
                 estudiante,
@@ -61,24 +68,5 @@ public class ReservaBuilder {
                 tema,
                 observaciones
         );
-    }
-
-    private void validarCamposObligatorios() {
-
-        if (estudiante == null || estudiante.isBlank()) {
-            throw new IllegalStateException("El estudiante es obligatorio.");
-        }
-
-        if (tutor == null || tutor.isBlank()) {
-            throw new IllegalStateException("El tutor es obligatorio.");
-        }
-
-        if (fecha == null || fecha.isBlank()) {
-            throw new IllegalStateException("La fecha es obligatoria.");
-        }
-
-        if (hora == null || hora.isBlank()) {
-            throw new IllegalStateException("La hora es obligatoria.");
-        }
     }
 }
