@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ReservaObservable {
 
-    private String estado;
+    private EstadoReserva estado;
     private final List<ObservadorReserva> observadores = new ArrayList<>();
 
     public void agregarObservador(ObservadorReserva observador) {
@@ -17,17 +17,21 @@ public class ReservaObservable {
     }
 
     public void cambiarEstado(String nuevoEstado) {
+        cambiarEstado(EstadoReserva.valueOf(nuevoEstado));
+    }
+
+    public void cambiarEstado(EstadoReserva nuevoEstado) {
         this.estado = nuevoEstado;
         notificarObservadores();
     }
 
     private void notificarObservadores() {
         for (ObservadorReserva observador : observadores) {
-            observador.actualizar(estado);
+            observador.actualizar(estado.name());
         }
     }
 
     public String getEstado() {
-        return estado;
+        return estado != null ? estado.name() : null;
     }
 }
