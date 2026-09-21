@@ -1,9 +1,8 @@
 package edu.uees.patrones.strategy;
 
-public class CancelacionPrioritaria implements PoliticaCancelacion {
+public class CancelacionPrioritaria extends PoliticaCancelacionBase {
 
-    @Override
-    public boolean puedeCancelar(int horasAntes) {
-        return horasAntes >= 2;
+    public CancelacionPrioritaria() {
+        super(2);
     }
 }

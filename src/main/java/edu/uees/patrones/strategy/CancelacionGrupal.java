@@ -1,9 +1,8 @@
 package edu.uees.patrones.strategy;
 
-public class CancelacionGrupal implements PoliticaCancelacion {
+public class CancelacionGrupal extends PoliticaCancelacionBase {
 
-    @Override
-    public boolean puedeCancelar(int horasAntes) {
-        return horasAntes >= 48;
+    public CancelacionGrupal() {
+        super(48);
     }
 }
